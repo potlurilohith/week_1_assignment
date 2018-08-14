@@ -1,0 +1,401 @@
+---
+title: "Potluri_Week1_homework1"
+author: "Lohith Sekhar Potluri"
+date: "12 August 2018"
+output:
+  word_document: default
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+```{r}
+insurance <- read.csv("C:/Users/Lohith/Desktop/6. ANA625 Categorical Data Methods, Appl/Week 0/insurance.csv")
+
+```
+
+#Exloratory Data Analysis: Analysing the dataset
+```{r}
+#view the data in the console
+insurance
+```
+
+```{r}
+#overview of dataset
+  str(insurance)
+  #This one command can give the all the datatypes of the variables in the dataset
+  #In this case, there are 2 numeric variables, 2 integer variables and 3 factor (categorical variables)
+```
+
+```{r}
+#Similar output to above line of code but determing the datatype of each variable separately
+class(insurance$age)
+class(insurance$sex)
+class(insurance$bmi)
+class(insurance$children)
+class(insurance$smoker)
+class(insurance$region)
+class(insurance$charges)
+# There are 3 categorical, 4 numerical variables in the dataset  
+```
+
+```{r}
+#dimensions of the dataset
+dim(insurance)
+# there are 1338 rows and 7 columns in the dataset
+```
+
+```{r}
+#To view the 5th(any) observation
+insurance[5,]
+```
+
+```{r}
+#number of rows and number of columns (similar to dimensions)
+nrow(insurance)
+ncol(insurance)
+# there are 1338 rows and 7 columns
+```
+
+#Discpritive Statistics via various methods  
+
+```{r}
+#Computing mean for each variable separately and respective values listed below
+mean(insurance$charges)
+mean(insurance$age)
+mean(insurance$bmi)
+mean(insurance$children)
+```
+```{r}
+#Computing median for each variable separately and respective values listed below
+median(insurance$charges)
+median(insurance$age)
+median(insurance$bmi)
+median(insurance$children)
+```
+```{r}
+#Kurtosis for all the numeric varibles and respective values listed below
+e1071::kurtosis(insurance$charges)
+e1071::kurtosis(insurance$age)
+e1071::kurtosis(insurance$bmi)
+e1071::kurtosis(insurance$children)
+```
+```{r}
+#Skewness for all the numeric varibles and respective values listed below
+e1071::skewness(insurance$charges)
+e1071::skewness(insurance$age)
+e1071::skewness(insurance$bmi)
+e1071::skewness(insurance$children)
+# Charges's values are highly and positively skewed when compared to other numerical variables  
+```
+```{r}
+#Standard Deviation for all the numeric varibles and respective values listed below
+sd(insurance$charges)
+sd(insurance$age)
+sd(insurance$bmi)
+sd(insurance$children)
+# Charges attribute has the high standard deviation which shows that the values are hisly dispersed from the mean
+```
+```{r}
+#Variance for all the numeric varibles and respective values listed below
+var(insurance$charges)
+var(insurance$age)
+var(insurance$bmi)
+var(insurance$children)
+# Charges attribute has the high variance which shows that the values are hisly dispersed from the mean
+```
+```{r}
+#Inter Quartile Range for all the numeric varibles and respective values listed below
+IQR(insurance$charges)
+IQR(insurance$age)
+IQR(insurance$bmi)
+IQR(insurance$children)
+```
+```{r}
+#Inter Quartile Range for all the categorical varibles and respective values listed below
+IQR(insurance$sex)
+IQR(insurance$smoker)
+IQR(insurance$region)
+```
+```{r}
+#Quartile values for all the numeric varibles and respective values listed below
+quantile(insurance$charges)
+quantile(insurance$age)
+quantile(insurance$bmi)
+quantile(insurance$children)
+```
+```{r}
+#Sescriptive stat summary of all the variables in the dataset
+summary(insurance)
+```
+
+```{r}
+#All the functions in descriptive stats in one command
+psych::describe(insurance)
+# The variabe names with * are considered to be as a categorical variables, in this case the categorical values are notated with 0,1,2,3,... notations, So we can discard them.
+```
+```{r}
+#distribution of values in categorical variable "sex" among 1338 observations
+table(insurance$sex)
+```
+
+```{r}
+#distribution of values in categorical variable "region" among 1338 observations
+table(insurance$region)
+```
+
+```{r}
+#distribution of values in categorical variable "smoker" among 1338 observations
+table(insurance$smoker)
+```
+
+```{r}
+# No of females smoke and dont smoke as per dataset
+# There are 115 female smokers and 547 female nonsmokers in the dataset
+```
+
+```{r}
+# No of males smoke and dont smoke as per dataset
+table(insurance$smoker[insurance$sex == "male"])
+# There are 159 male smokers and 517 male nonsmokers in the dataset
+```
+```{r}
+#Correlation inbetween all the numerical variables
+cor_data <- insurance[, c(1,3,4,7)]
+cor(na.omit(cor_data))
+# Charges and Children are more correlated when compared to the other variables in the dataset
+```
+
+#Plots and Graphs
+```{r}
+#Basic Scatter Plot matrix among all the variables in the dataset
+pairs(insurance, col = "navy", main = "Scatterplot Matrix for all the variables")
+```
+
+```{r}
+#Basic Scatter Plot Matrix but grouped by Categorical variable sex where Red is Male and Black is Female
+pairs(insurance, col=insurance$sex, main = "Scatterplot Matrix for all the variables grouped by variable Sex")
+```
+
+```{r}
+#Scatterplot Matrix usinf library lattice
+library(lattice)
+splom(insurance[c(1,2,3,4,5,6,7)], main = "Scatter Plot Matrix", 
+      varnames = c("AGE","SEX", "BMI","CHILDREN","SMOKER", "REGION", "CHARGES"),
+    varnames.labels = 9)
+```
+
+```{r}
+#Scatterplot Matrix using Psych package for only numerical variables
+library(psych)
+pairs.panels(insurance[c(1,3,4,7)], 
+             method = "pearson", # correlation method
+             hist.col = "#00AFBB",
+             density = TRUE,  # show density plots
+             ellipses = TRUE, # show correlation ellipses
+              main = "Numerical Variable Scatterplot Matrix with Correlation Values"
+             )
+#Existing correlation values on the upper panel 
+```
+
+```{r}
+#Histogram illustrating the frequency of numerical variable age
+hist(insurance$age, breaks = 5, density = 10, angle = 75, col = "navy", border = "red", main = "Distribution of values in Age variable", 
+     xlab = "Values of Age", ylab = "Count of People")
+```
+
+```{r}
+# QQ PLot to check if the values are normally distributed in Age Variable
+qqnorm(insurance$age, col = "Navy", main = "QQplot for Age variable")
+qqline(insurance$age, col = "orange")
+```
+```{r}
+# The Above QQ PLot illustrates that the values in age variable is not normally distributed because the line in the above QQplot is not a linearly increasing line 
+```
+
+```{r}
+#Histogram illustrating the frequency of numerical variable bmi
+hist(insurance$bmi, angle = 75, col = "navy", border = "orange", main = "Distribution of values in BMI variable", 
+     xlab = "BMI Values", ylab = "Count of People")
+```
+
+```{r}
+# QQ PLot to check if the values are normally distributed in Age Variable
+qqnorm(insurance$bmi, col = "Navy", main = "QQplot for bmi variable")
+qqline(insurance$bmi, col = "orange")
+```
+
+
+```{r}
+# The Above QQ PLot illustrates that the values in bmi variable is a bit normally distributed because the line in the above QQplot is having a line similar to linearly increasing line
+```
+
+```{r}
+#Histogram illustrating the frequency of numerical variable bmi
+hist(insurance$charges, angle = 75, col = "orange", border = "navy", main = "Distribution of values in Charges variable", 
+     xlab = "Charges Values", ylab = "Count of People")
+
+```
+
+```{r}
+# QQ PLot to check if the values re normally distributed in Age Variable
+qqnorm(insurance$charges, col = "Navy", main = "QQplot for Charges variable")
+qqline(insurance$charges, col = "orange")
+```
+
+```{r}
+# The Above QQ PLot illustrates that the values in charges variable is not normally distributed because the line in the above QQplot is not a linearly increasing line 
+```
+
+
+```{r}
+# Pie Chart showing the number of smokers classified by gender
+sex_smokers<-table(insurance$sex[insurance$smoker == "yes"])
+pie(sex_smokers,col = c("orange","green"),labels = insurance$sex, border = "black", main = "Classification by Gender Among Smokers")
+
+```
+
+```{r}
+# Box plot for charges value in all the 4 regions in the dataset 
+boxplot(insurance$charges~insurance$region, col = "Navy", border = "orange", main = "Box plot for charges value in all the 4 regions", xlab = "4 Regions", ylab = "Charge values")
+
+```
+
+```{r}
+library(easyGgplot2)
+library(devtools)
+#Scatter Plot in between Age and Charges grouped by sex
+ggplot(insurance, aes(y = charges, x =age, colour = sex)) + geom_point() + 
+  ggtitle("Scatter Plot between Age and Charges") +   
+  theme(plot.title = element_text(hjust = 0.5)) + geom_smooth(method='lm')
+```
+
+```{r}
+#There exists a positive correlation between variables independent variable, age and dependent variable, charges
+```
+
+```{r}
+#Scatter Plot in between BMI and Charges grouped by region
+ggplot(insurance, aes(y = charges, x =bmi, colour = region)) + geom_point() + 
+  ggtitle("Scatter Plot between BMI and Charges") +   
+  theme(plot.title = element_text(hjust = 0.5))+ geom_smooth(method='lm')
+```
+
+```{r}
+#There exists a positive correlation between variables independent variable, BMI and dependent variable, charges
+```
+
+```{r}
+# Scatter plot in between Children and charges grouped by sex
+ggplot(insurance, aes(x =insurance$children , y =insurance$charges )) + geom_point() + facet_grid(~insurance$sex) + ggtitle("Scatter Plot between Children and Charges") +
+  theme(plot.title = element_text(hjust = 0.5))+ geom_smooth(method='lm') + xlab("Number of Children") + ylab("Value of Charges")
+```
+
+```{r}
+#There exists a positive correlation between variables independent variable, children and dependent variable, charges.
+# The correlation is higher among males than females in this case. 
+```
+
+# Linear Regression
+```{r}
+# Finding the best which variable alone describes the dependent variable Charges the best
+# AGE VS CHARGES
+agevscharges<-lm(insurance$charges~insurance$age)
+summary(agevscharges)
+```
+
+```{r}
+# SEX VS CHARGES
+sexvscharges<-lm(insurance$charges~insurance$sex)
+summary(sexvscharges)
+```
+
+```{r}
+# BMI VS CHARGES
+bmivscharges<-lm(insurance$charges~insurance$bmi)
+summary(bmivscharges)
+```
+
+```{r}
+# CHILDREN VS CHARGES
+childvscharges<-lm(insurance$charges~insurance$children)
+summary(childvscharges)
+```
+
+```{r}
+# SMOKER VS CHARGES
+smokervscharges<-lm(insurance$charges~insurance$smoker)
+summary(smokervscharges)
+```
+
+```{r}
+# REGION VS CHARGES
+regionvscharges<-lm(insurance$charges~insurance$region)
+summary(regionvscharges)
+```
+
+```{r}
+# Among all the varibles SMOKER is the best varible which more accurately predicts Charges when compared to others 
+```
+
+# Multiple Regression
+```{r}
+allvarsvscharge<-lm(insurance$charges~insurance$age+insurance$sex+insurance$bmi+insurance$children+insurance$smoker+insurance$region)
+summary(allvarsvscharge)
+
+```
+```{r}
+# Implementing Multiple regression with new variable obtained by squaring Age values 
+insurance$age2 <- (insurance$age)^2
+allage2vscharge <- lm(charges ~  age + children + bmi + sex + smoker + region + age2, data = insurance)
+summary(allage2vscharge)
+```
+
+```{r}
+#There is No significant increase in R-Squared value which means new modified variable age2 didn,t contribute much to the existing regression model. So Computing this new age2 variable is disregarded.
+```
+
+```{r}
+# Implementing Multiple regression with new variable obtained by squaring BMI values 
+insurance$bmi2 <- (insurance$bmi)^2
+allbmivscharge <- lm(charges ~  age + children + bmi + sex + smoker + region + bmi2, data = insurance)
+summary(allbmivscharge)
+```
+
+```{r}
+#There is No significant increase in R-Squared value which means new modified variable bmi2 didn,t contribute much to the existing regression model. So computing this new bmi2 variable is disregarded.
+```
+
+```{r}
+# Implementing Multiple regression with new variable obtained by log tranformation of  Age values 
+insurance$age2 <- log(insurance$age)
+allage2vscharge <- lm(charges ~  age + children + bmi + sex + smoker + region + age2, data = insurance)
+summary(allage2vscharge)
+```
+```{r}
+#There is No significant increase in R-Squared value which means new modified variable age2 didn,t contribute much to the existing regression model. So Computing this new age2 variable is disregarded.
+```
+
+```{r}
+# Implementing Multiple regression with new variable obtained by log tranformation of BMI values 
+insurance$bmi2 <- log(insurance$bmi)
+allbmivscharge <- lm(charges ~  age + children + bmi + sex + smoker + region + bmi2, data = insurance)
+summary(allbmivscharge)
+
+```
+
+```{r}
+#There is No significant increase in R-Squared value which means new modified variable bmi2 didn,t contribute much to the existing regression model. So Computing this new bmi2 variable is disregarded.
+```
+
+```{r}
+# Among all the above Multiple Regression Models worked on, the Regression model without adding the any new varibles is the most efficient one, i.e., age + children + bmi + sex + smoker + region predicts the dependent variable charges in an efficient manner.
+```
+
+# Generalised Model Regression 
+```{r}
+allvarglm<- glm(charges ~age+sex+bmi+children+smoker+region, data = insurance, family = "gaussian")
+summary(allvarglm)
+```
+```{r}
+# In Generalised Liner Modelling only Gaussian distribution can be used in this case becasue Binomial Distribution is used only when the dependent variable is in binary format, and Poisson distribution os used when the dependent variable is having the count of (or similar to count values) values of independent variable.
+```
